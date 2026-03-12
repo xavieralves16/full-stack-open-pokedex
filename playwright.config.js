@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: 'e2e-tests',
@@ -7,13 +7,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  
+
   use: {
     baseURL: 'http://localhost:5000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-  
+
   webServer: {
     command: 'npm run start:test',
     port: 5000,
@@ -22,4 +22,4 @@ export default defineConfig({
     stdout: 'pipe',
     stderr: 'pipe',
   },
-});
+})

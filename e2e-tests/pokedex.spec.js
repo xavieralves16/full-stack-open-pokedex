@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('@playwright/test')
 
 test.describe('Pokedex', () => {
   async function setupRequestInterception(page) {
     await page.route('**/pokeapi.co/**', async route => {
-      const url = route.request().url();
-      
+      const url = route.request().url()
+
       if (url.includes('pokemon?limit=50') || url.includes('pokemon/?limit=50')) {
         const mockResponse = {
           count: 1118,
@@ -18,8 +18,8 @@ test.describe('Pokedex', () => {
             { name: 'charmeleon', url: 'https://pokeapi.co/api/v2/pokemon/5/' },
             { name: 'charizard', url: 'https://pokeapi.co/api/v2/pokemon/6/' }
           ]
-        };
-        
+        }
+
         await route.fulfill({
           status: 200,
           headers: {
@@ -27,8 +27,8 @@ test.describe('Pokedex', () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(mockResponse)
-        });
-      } 
+        })
+      }
       else if (url.match(/pokemon\/\d+/) || url.match(/pokemon\/[a-zA-Z]+/)) {
 
         const mockDetailResponse = {
@@ -127,8 +127,8 @@ test.describe('Pokedex', () => {
             front_shiny: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/2.png',
             back_shiny: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/2.png'
           }
-        };
-        
+        }
+
         await route.fulfill({
           status: 200,
           headers: {
@@ -136,43 +136,43 @@ test.describe('Pokedex', () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(mockDetailResponse)
-        });
+        })
       }
       else {
-        await route.continue();
+        await route.continue()
       }
-    });
+    })
   }
 
   test('front page can be opened', async ({ page }) => {
-    test.setTimeout(120000);
-    await setupRequestInterception(page);
-    
-    await page.goto('/');
-    await page.waitForTimeout(2000);
-    
-    await expect(page.getByText('ivysaur', { exact: false })).toBeVisible();
+    test.setTimeout(120000)
+    await setupRequestInterception(page)
+
+    await page.goto('/')
+    await page.waitForTimeout(2000)
+
+    await expect(page.getByText('ivysaur', { exact: false })).toBeVisible()
     await expect(
       page.getByText('Pokémon and Pokémon character names are trademarks of Nintendo.')
-    ).toBeVisible();
-  });
+    ).toBeVisible()
+  })
 
   test('can navigate to individual pokemon page', async ({ page }) => {
-    test.setTimeout(120000);
-    
-    await setupRequestInterception(page);
-    
-    await page.goto('/');
-    await page.waitForTimeout(2000);
-    
-    await page.getByText('ivysaur', { exact: false }).first().click();
-    
-    await page.waitForURL('**/pokemon/**', { timeout: 10000 });
-    
-    await page.waitForTimeout(3000);
-    
-    await expect(page.locator('.pokemon-name')).toHaveText('ivysaur');
-    
-    await expect(page.locator('.pokemon-ability-name:has-text("chlorophyll")')).toBeVisible();
-  });
-});
+    test.setTimeout(120000)
+
+    await setupRequestInterception(page)
+
+    await page.goto('/')
+    await page.waitForTimeout(2000)
+
+    await page.getByText('ivysaur', { exact: false }).first().click()
+
+    await page.waitForURL('**/pokemon/**', { timeout: 10000 })
+
+    await page.waitForTimeout(3000)
+
+    await expect(page.locator('.pokemon-name')).toHaveText('ivysaur')
+
+    await expect(page.locator('.pokemon-ability-name:has-text("chlorophyll")')).toBeVisible()
+  })
+})
