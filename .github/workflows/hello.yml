@@ -1,14 +1,20 @@
-name: Hello World!
+name: Hello World with Date and Directory
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  hello_world_job:
+  say-hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Say hello
-        run: |
-          echo "Hello World!"
+      - name: Print Hello World
+        run: echo "Hello World!"
+
+      - name: Print current date
+        run: date
+
+      - name: List directory contents
+        run: ls -l
