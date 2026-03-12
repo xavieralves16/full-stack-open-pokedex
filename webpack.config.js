@@ -43,6 +43,19 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    port: 5000,
+    open: false, // Não abrir o navegador automaticamente durante testes
+    hot: false, // Desativar HMR
+    liveReload: false, // Desativar live reload
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'https://pokeapi.co/api/v2',
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true,
+        secure: false,
+      },
+    ],
   },
   plugins: [
     new HtmlWebPackPlugin({
