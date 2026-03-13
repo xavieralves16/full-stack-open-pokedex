@@ -30,5 +30,8 @@ jobs:
         
       - name: Run e2e tests
         run: npm run test:e2e
+      
+      - name: Trigger Render deployment
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
     
